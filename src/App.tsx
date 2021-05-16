@@ -1,4 +1,4 @@
-import { Button, DatePicker, Input } from "antd";
+import { Button, DatePicker, Descriptions, Input } from "antd";
 import { Moment } from "moment";
 import React, { useState, useEffect } from "react";
 import "./App.scss";
@@ -6,6 +6,7 @@ import "antd/dist/antd.css";
 import Title from "./components/atoms/title";
 import { useSelector, useDispatch } from "react-redux";
 import { createUrl, getAllUserUrls } from "./store/actions";
+import { ERROR, HOST, URL_VALIDATE_REGEX } from "./utils/constants";
 
 const App: React.FC = () => {
   const urls = useSelector((state: UrlState) => state.urls);
@@ -26,26 +27,19 @@ const App: React.FC = () => {
 
   const handleShortenUrl = () => {
     if (!originalUrl && !expirationDate) {
-      setErrorMessage("Enter all fields");
-    } else if (
-      !originalUrl.match(
-        "((http|https)://)(www.)?" +
-          "[a-zA-Z0-9@:%._\\+~#?&//=]" +
-          "{2,256}\\.[a-z]" +
-          "{2,6}\\b([-a-zA-Z0-9@:%" +
-          "._\\+~#?&//=]*)"
-      )
-    ) {
-      setErrorMessage("Url Not Valid");
+      setErrorMessage(ERROR.MISSING_FIELDS);
+    } else if (!originalUrl.match(URL_VALIDATE_REGEX)) {
+      setErrorMessage(ERROR.URL_INVALID);
     } else {
+      setErrorMessage("");
       dispatch(createUrl(originalUrl, expirationDate));
     }
   };
 
   return (
-    <div className="App">
+    <main className="App">
       <Title>Url Shortner</Title>
-      <div>
+      <section>
         <Input
           value={originalUrl}
           placeholder="Enter Url"
@@ -63,27 +57,25 @@ const App: React.FC = () => {
           Convert
         </Button>
         {errorMessage}
-      </div>
-      <div>
+      </section>
+      <section>
         {urls.map((url: IUrl) => {
           return (
-            <div>
-              <p>{url.originalUrl}</p>
-              <p>Converts To</p>
-              <p>{`http://localhost:8080/url/get?url=${url.shortUrl}`}</p>
-              <p>Accessed By Following IP:</p>
-              {url.accessedBy?.map((accessor) => {
-                return (
-                  <>
-                    {accessor}
-                  </>
-                );
-              })}
-            </div>
-          )
+            <Descriptions layout="vertical" bordered>
+              <Descriptions.Item label="Original Url">
+                {url.originalUrl}
+              </Descriptions.Item>
+              <Descriptions.Item label="Converted Url">{`${HOST}${url.shortUrl}`}</Descriptions.Item>
+              <Descriptions.Item label="IPs accessing this Url">
+                {url.accessedBy?.map((accessor) => {
+                  return <>{accessor}</>;
+                })}
+              </Descriptions.Item>
+            </Descriptions>
+          );
         })}
-      </div>
-    </div>
+      </section>
+    </main>
   );
 };
 
