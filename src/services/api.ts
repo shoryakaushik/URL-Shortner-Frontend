@@ -1,6 +1,6 @@
 // API Constants
 export const HOST_URLS = {
-    URL: `http://localhost:8080/url/`,
+    URL: `http://localhost:8080/url`,
 };
 
 // API Configurations

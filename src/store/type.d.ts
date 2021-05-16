@@ -9,7 +9,7 @@ interface IUrl {
 }
 
 type UrlState = {
-    urls: IBilling[]
+    urls: IUrl[]
 }
 
 type UrlAction = {

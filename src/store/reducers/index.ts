@@ -10,7 +10,7 @@ const reducer = (
 ): UrlState => {
     switch (action.type) {
         case ADD_URL:
-            return action.payload
+            return { ...state, urls: action.payload }
     }
     return state
 }
