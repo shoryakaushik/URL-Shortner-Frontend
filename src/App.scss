@@ -1,0 +1,9 @@
+.App {
+  width: 50%;
+  header {
+    margin: 1rem;
+  }
+  & > section {
+    margin: 1rem;
+  }
+}
