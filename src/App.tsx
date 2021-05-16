@@ -58,9 +58,9 @@ const App: React.FC = () => {
         </Button>
         {errorMessage}
       </section>
-      <section>
-        {urls.map((url: IUrl) => {
-          return (
+      {urls.map((url: IUrl) => {
+        return (
+          <section>
             <Descriptions layout="vertical" bordered>
               <Descriptions.Item label="Original Url">
                 {url.originalUrl}
@@ -72,9 +72,9 @@ const App: React.FC = () => {
                 })}
               </Descriptions.Item>
             </Descriptions>
-          );
-        })}
-      </section>
+          </section>
+        );
+      })}
     </main>
   );
 };
